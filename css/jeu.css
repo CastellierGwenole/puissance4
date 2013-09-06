@@ -1,0 +1,44 @@
+	.jeu {
+	    font-family: "Helvetica Neue",Helvetica,Arial;
+		color: #ccc;
+	}
+		ol>li{
+			margin-top:-1.5px;
+		}
+		ul {
+			list-style:none;
+			padding: 0;
+			margin:0;
+		}
+		ul li {
+			border-top: thin solid silver;
+			border-left: thin solid silver;
+			display:inline-block;
+			width:20px;
+			height:20px;
+			line-height:16px;
+			margin-left: -1px;
+			text-align: center;
+			cursor:pointer;
+		}
+		
+		ul li.o, ul li.x {
+			cursor:not-allowed;
+		}
+		
+		ul li.o:before, ul li.x:before {
+		color: #000;
+			position:absolute;
+		}
+		
+		ul li.o:before {
+			content:'o';
+		}
+		ul li.x:before {
+			content:'x';
+		}
+		
+		.alignes {
+			background-color:yellow;
+		}
+		
