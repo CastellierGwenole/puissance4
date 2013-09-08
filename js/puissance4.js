@@ -20,8 +20,10 @@ var appPuissance4 = (function ( url, document ) {
 
   var jeu = new Firebase(url),
 	totAlign = 4,
-	frmAffichage = document.forms['affichage'],
+	piste = document.querySelector('ol.jeu'),
+	bts = piste.querySelectorAll('li button'),
 	colJeu = document.querySelectorAll('ol>li'),
+	frmAffichage = document.forms['affichage'],
 	partie = null,
 	joueur = 0,
 	aMoi = true,
@@ -55,17 +57,115 @@ var appPuissance4 = (function ( url, document ) {
 		
 		return tabCell; 
 	},
-	testHorizontale = function(cell) { return 1; },
-	testDiagonaleAsc = function(cell) { return 1; },
-	testDiagonaleDesc = function(cell) { return 1; },
+	testHorizontale = function(cell, row) {
+		var tabCell = [cell],
+			coul = cell.className,
+			colCour = cell.parentNode.parentNode.nextElementSibling;
+	
+		/* recherche un alignement sur la ligne */
+		while( colCour && tabCell.length < totAlign ) {
+			var cellCour = colCour.querySelectorAll('li')[row - 1];
+			
+			if(cellCour.classList.contains(coul)) {
+				tabCell.push( cellCour );
+				colCour = colCour.nextElementSibling;
+			} else {
+				colCour = null;
+			}
+		}
+		
+		colCour = cell.parentNode.parentNode.previousElementSibling;
+		while( colCour && tabCell.length < totAlign ) {
+			var cellCour = colCour.querySelectorAll('li')[row - 1];
+			
+			if(cellCour.classList.contains(coul)) {
+				tabCell.push( cellCour );
+				colCour = colCour.previousElementSibling;
+			} else {
+				colCour = null;
+			}
+		}
 
-	// Pose la candidature pour la partie dont le numero est renvoyée
+		return tabCell; 
+	},
+	testDiagonaleAsc = function(cell, row) {
+		var tabCell = [cell],
+			coul = cell.className,
+			colCour = cell.parentNode.parentNode.nextElementSibling,
+			rowCour = row - 1;
+			
+		/* recherche un alignement sur la diagonale ascendante */
+		while( colCour && rowCour > 0 && tabCell.length < totAlign ) {
+			var cellCour = colCour.querySelectorAll('li')[rowCour - 1];
+			
+			if(cellCour.classList.contains(coul)) {
+				tabCell.push(cellCour);
+				colCour = colCour.nextElementSibling;
+				rowCour--;
+			} else {
+				colCour = null;
+			}
+		}
+		
+		colCour = cell.parentNode.parentNode.previousElementSibling,
+		rowCour = row + 1;
+		while( colCour && rowCour < 7 && tabCell.length < totAlign ) {
+			var cellCour = colCour.querySelectorAll('li')[rowCour - 1];
+			
+			if(cellCour.classList.contains(coul)) {
+				tabCell.push(cellCour);
+				colCour = colCour.previousElementSibling;
+				rowCour++;
+			} else {
+				colCour = null;
+			}
+		}
+
+		return tabCell; 
+	},
+	testDiagonaleDesc = function(cell, row) {
+		var tabCell = [cell],
+			coul = cell.className,
+			colCour = cell.parentNode.parentNode.nextElementSibling,
+			rowCour = row + 1;
+
+		/* recherche un alignement sur la diagonale descendante */
+		while( colCour && rowCour < 7 && tabCell.length < totAlign ) {
+			var cellCour = colCour.querySelectorAll('li')[rowCour - 1];
+			
+			if(cellCour.classList.contains(coul)) {
+				tabCell.push(cellCour);
+				colCour = colCour.nextElementSibling;
+				rowCour++;
+			} else {
+				colCour = null;
+			}
+		}
+		
+		colCour = cell.parentNode.parentNode.previousElementSibling,
+		rowCour = row - 1;
+		while( colCour && rowCour > 0 && tabCell.length < totAlign ) {
+			var cellCour = colCour.querySelectorAll('li')[rowCour - 1];
+			
+			if(cellCour.classList.contains(coul)) {
+				tabCell.push(cellCour);
+				colCour = colCour.previousElementSibling;
+				rowCour--;
+			} else {
+				colCour = null;
+			}
+		}
+		
+		return tabCell; 
+	},
+	// Reponse à l'enregistrement d'un coup
 	afficheCoup = function(snapCoup) {
 		var coup = snapCoup.val();
 			col = coup.colonne;
 			
 		if(col != undefined) {
 			var cell = colJeu[col - 1].querySelector('li:last-child'),
+				rang = 6,
 				cellOk = null;
 
 			while(cell) {
@@ -75,11 +175,29 @@ var appPuissance4 = (function ( url, document ) {
 					cell = null;
 				} else {
 					cell = cell.previousSibling;
+					rang--;
 				}
 			}
 			if(cellOk) {
-				gagne = testVerticale(cellOk)
+				var cells = testVerticale(cellOk);
+				
+				if(!(cells.length >= totAlign)) {
+					cells = testHorizontale(cellOk, rang);
+					
+					if(!(cells.length >= totAlign)) {
+						cells = testDiagonaleAsc(cellOk, rang);
+						
+						if(!(cells.length >= totAlign)) {
+							cells = testDiagonaleDesc(cellOk, rang);
+						}
+					}
+				}
+				
+				if(cells.length >= totAlign) {
+					cells.forEach(function(el) { return el.classList.add('zoom'); });
+				}
 			}
+			
 			aMoi = !aMoi;
 		}
 		
@@ -122,6 +240,13 @@ var appPuissance4 = (function ( url, document ) {
 					}
 				
 					partie.on('child_added', afficheCoup);
+
+					// UI
+					piste.classList.add(couleur);
+					for( var i = 0, nbBts = bts.length; i < nbBts ; i++ ) {
+						bts[i].addEventListener('click', joue);
+					}
+
 				} else {
 					// Création d'une nouvelle partie
 					document.getElementById('numPartie').textContent = 'Nouvelle Partie ';
@@ -138,25 +263,19 @@ var appPuissance4 = (function ( url, document ) {
 				}
 			  }
 		});
+	},
+	joue = function(e) {
+		if(aMoi) {
+			partie.push({ couleur: couleur, colonne: e.target.parentNode.dataset.col });
+		}
 	}
 
 	return {
 		// Lorsque l'on récupère le numero de la dernière partie, on candidate
 		init: function( ) { return jeu.child('numPartie').once('value', candidatePartie); },
 
-		joue: function(e) {
-			if(aMoi) {
-				partie.push({ couleur: couleur, colonne: e.target.parentNode.dataset.col });
-			}
-		}
 	};
   
 })('https://polinux-chrono.firebaseio.com/jeu/puissance4', window.document);
 
-var bts = document.querySelectorAll('ol li button'),
-	nbBts = bts.length;
-	
 appPuissance4.init();
-for( var i = 0 ; i < nbBts ; i++ ) {
-	bts[i].addEventListener('click', appPuissance4.joue);
-}

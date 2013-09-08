@@ -3,11 +3,13 @@ font-family: "Helvetica Neue",Helvetica,Arial;
 color: #ccc;
 }
 ol>li{
-	margin:0 -4px;
-	padding:4px;
 	display:inline-block;
-	background-color: #002ae0;
 	text-align:center;
+	background-color: #002ae0;
+	margin:0 -4px;
+	padding:8px;
+	
+	background: linear-gradient(to bottom, #ffffff 0%,#ffffff 36px,#002ae0 44px,#002ae0 100%); /* W3C */
 }
 ul {
 	list-style:none;
@@ -19,7 +21,7 @@ ul li {
 	width:48px;
 	height:48px;
 	line-height:16px;
-	margin: 8px 4px;
+	margin: 12px 4px;
 	text-align: center;
 	border-radius: 50%;
 	background-color:#fff;
@@ -39,10 +41,44 @@ ul li.jaune {
 		-4px -4px 2px #ffe8b6 inset, 4px 4px 2px #a77200 inset;
 }
 
-li button {
-	cursor:pointer;
+.jeu button:hover {
+	opacity:.8;
 }
-		
+
+.jeu button {
+	cursor:pointer;
+	border-top: 4px solid #fff;
+	border-bottom: none;
+	border-top-left-radius:50% 100%;
+	border-top-right-radius:50% 100%;
+	width:48px;
+	height:24px;
+	line-height:16px;
+	margin: 8px 4px 24px 4px;
+	text-align: center;
+	opacity:.3;
+	
+}
+ol.rouge button {
+	border-color: #f00;
+	background-color:#f00;
+    box-shadow: -4px -4px 2px #ffb6b6 inset, 4px 4px 2px #a70000 inset;
+}
+ol.jaune button {
+	border-color: #fa0;
+	background-color:#fa0;
+    box-shadow: -4px -4px 2px #ffe8b6 inset, 4px 4px 2px #a77200 inset;
+}
+
+ul li.zoom {
+-webkit-transform: scale(1.2, 1.2);
+    -webkit-transition-timing-function: ease-out;
+    -webkit-transition-duration: 250ms;
+    -moz-transform: scale(1.2, 1.2);
+    -moz-transition-timing-function: ease-out;
+    -moz-transition-duration: 250ms;
+    box-shadow: -4px -4px 2px #ffb6b6 inset, 4px 4px 2px #a70000 inset;
+}
 
 ul li.o:before, ul li.x:before {
 color: #000;
@@ -54,8 +90,4 @@ ul li.o:before {
 }
 ul li.x:before {
 	content:'x';
-}
-
-.alignes {
-	background-color:yellow;
 }
