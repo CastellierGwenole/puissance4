@@ -10,8 +10,7 @@
  * Puissance 4
  *
  * A Faire :
- * - standardisation du code + commentaire
- * - Utiliser les transaction pour les entrées dans la partie https://www.firebase.com/docs/transactions.html
+ * -  commentaire
  * - listener sur les deconnexion
  * 
  * Licensed under the GPL license:
@@ -20,6 +19,7 @@
 var appPuissance4 = (function ( url, document ) {
 
   var jeu = new Firebase(url),
+	totAlign = 4,
 	frmAffichage = document.forms['affichage'],
 	colJeu = document.querySelectorAll('ol>li'),
 	partie = null,
@@ -27,6 +27,37 @@ var appPuissance4 = (function ( url, document ) {
 	aMoi = true,
 	couleur = 'rouge',
 	increment = function(nb) { return nb + 1; },
+	
+	testVerticale = function(cell) {
+		var tabCell = [cell],
+			coul = cell.className,
+			cellCour = cell.nextSibling;
+		
+		/* recherche un alignement sur la ligne */
+		while( cellCour && tabCell.length <= totAlign ) {
+			if(cellCour.classList.contains(coul)) {
+				tabCell.push( cellCour );
+				cellCour = cellCour.nextSibling;
+			} else {
+				cellCour = null;
+			}
+		}
+		
+		cellCour = cell.previousSibling;
+		while( cellCour && tabCell.length <= totAlign ) {
+			if(cellCour.classList.contains(coul)) {
+				tabCell.push( cellCour );
+				cellCour = cellCour.previousSibling;
+			} else {
+				cellCour = null;
+			}
+		}
+		
+		return tabCell; 
+	},
+	testHorizontale = function(cell) { return 1; },
+	testDiagonaleAsc = function(cell) { return 1; },
+	testDiagonaleDesc = function(cell) { return 1; },
 
 	// Pose la candidature pour la partie dont le numero est renvoyée
 	afficheCoup = function(snapCoup) {
@@ -34,15 +65,20 @@ var appPuissance4 = (function ( url, document ) {
 			col = coup.colonne;
 			
 		if(col != undefined) {
-			var cell = colJeu[col - 1].querySelector('li:last-child');
+			var cell = colJeu[col - 1].querySelector('li:last-child'),
+				cellOk = null;
 
 			while(cell) {
 				if(cell.className == '') {
 					cell.classList.add(coup.couleur);
+					cellOk = cell;
 					cell = null;
 				} else {
 					cell = cell.previousSibling;
 				}
+			}
+			if(cellOk) {
+				gagne = testVerticale(cellOk)
 			}
 			aMoi = !aMoi;
 		}
@@ -77,7 +113,7 @@ var appPuissance4 = (function ( url, document ) {
 						partie.child( 'nbJoueurs' ).once( 'value', function(snapshot) {
 						
 							if(2 == 0 + snapshot.val())
-								document.getElementById('attente').textContent = '2eme joueur OK';
+								frmAffichage.attente.value = '2eme joueur OK';
 						});
 					} else {
 						couleur = 'jaune';
