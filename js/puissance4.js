@@ -11,7 +11,7 @@
  *
  * A Faire :
  * - standardisation du code + commentaire
- * - Utiliser les transaction pour les entrées dans la partie https://www.firebase.com/docs/transactions.html
+ * - Utiliser les transaction pour les entrÃ©es dans la partie https://www.firebase.com/docs/transactions.html
  * - listener sur les deconnexion
  * 
  * Licensed under the GPL license:
@@ -28,7 +28,7 @@ var appPuissance4 = (function ( url, document ) {
 	couleur = 'rouge',
 	increment = function(nb) { return nb + 1; },
 
-	// Pose la candidature pour la partie dont le numero est renvoyée
+	// Pose la candidature pour la partie dont le numero est renvoyÃ©e
 	afficheCoup = function(snapCoup) {
 		var coup = snapCoup.val();
 			col = coup.colonne;
@@ -49,7 +49,7 @@ var appPuissance4 = (function ( url, document ) {
 		
 		return;
 	}
-	// Pose la candidature pour la partie dont le numero est renvoyée
+	// Pose la candidature pour la partie dont le numero est renvoyÃ©e
 	candidatePartie = function(snapNum) {
 		// Affiche le numero de partie et incremente le nb de joueur
 		frmAffichage.numPartie.value = ('000000' + snapNum.val()).slice(-6);
@@ -73,7 +73,7 @@ var appPuissance4 = (function ( url, document ) {
 					if (1 == joueur) {
 						couleur = 'rouge';
 						// Attente du deuxieme joueur
-						document.getElementById('attente').textContent = 'attente joueur ';
+						frmAffichage.attente.value = 'attente joueur ';
 						partie.child( 'nbJoueurs' ).once( 'value', function(snapshot) {
 						
 							if(2 == 0 + snapshot.val())
@@ -87,7 +87,7 @@ var appPuissance4 = (function ( url, document ) {
 				
 					partie.on('child_added', afficheCoup);
 				} else {
-					// Création d'une nouvelle partie
+					// CrÃ©ation d'une nouvelle partie
 					document.getElementById('numPartie').textContent = 'Nouvelle Partie ';
 					jeu.child('numPartie').transaction(increment,
 						function(error, committed, snapshot) {
@@ -105,7 +105,7 @@ var appPuissance4 = (function ( url, document ) {
 	}
 
 	return {
-		// Lorsque l'on récupère le numero de la dernière partie, on candidate
+		// Lorsque l'on rÃ©cupÃ¨re le numero de la derniÃ¨re partie, on candidate
 		init: function( ) { return jeu.child('numPartie').once('value', candidatePartie); },
 
 		joue: function(e) {
