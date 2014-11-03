@@ -6,6 +6,7 @@
 	<meta content="marc Laville - polinux" name="author" />
 	<meta content="Puissance 4" name="description" />
 	<link type="text/css" rel="stylesheet" href="./css/puissance4.css" />
+	<link type="text/css" rel="stylesheet" href="./polinux/px-layout.css" />
 	
 	<script src="https://cdn.firebase.com/v0/firebase.js"></script>
 	
@@ -16,13 +17,21 @@
 			<img src="./polinux/cover_krimson-accolade.jpg" alt="polinux.fr" />
 		</a>
 	</header>
-	<section>
+	<section><br>
+		<h1 style="display:none">&#9785 &#9786 &#9787</h1>
 		<form name='affichage'>
-			<label for='numPartie'>partie</label><output id='numPartie'></output>
-			<fieldset><legend>joueur</legend>
-				<output id='nbJoueur'></output>
-			</fieldset>
-			<output id='attente'></output>
+			<ul>
+				<li>
+					<label for='numPartie'>partie</label><input type='text' id='numPartie' disabled />
+				</li>
+				<li>
+					<input type='checkbox' id="chkCouleur">
+					<label for='chkCouleur'>joueur</label>
+				</li>
+				<li>
+					<label for='attente'>message</label><input type='text' id='attente' disabled />
+				</li>
+			</ul>
 		</form>
 		<ol id='ol-jeu' class="jeu">
 			<li data-col=1>
@@ -59,7 +68,7 @@
 	</section>
 	<footer>
 		<a target="_blank" href="http://www.polinux.fr">
-			<img src="http://bao.polinux.net/img/polinux-micro.gif" alt="www.polinux.fr" />
+			<img src="http://lib.polinux.fr/img/polinux-micro.gif" alt="www.polinux.fr" />
 		</a>
 	</footer>
 	<script type="text/javascript" src="./js/puissance4.js"></script>

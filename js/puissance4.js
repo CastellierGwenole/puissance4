@@ -4,7 +4,7 @@
  * @auteur     marc laville
  * @Copyleft 2013
  * @date       07/09/2013
- * @version    0.1
+ * @version    0.9
  * @revision   $0$
  *
  * Puissance 4
@@ -222,8 +222,7 @@ var appPuissance4 = (function ( url, document ) {
 				if (2 >= nbJoueur) {
 				
 					joueur = nbJoueur;
-					document.getElementById('nbJoueur').textContent = (joueur == 1) ? 'A' : 'B';
-					
+					frmAffichage.chkCouleur.checked = (joueur == 1);
 					if (1 == joueur) {
 						couleur = 'rouge';
 						// Attente du deuxieme joueur
@@ -236,11 +235,10 @@ var appPuissance4 = (function ( url, document ) {
 					} else {
 						couleur = 'jaune';
 						aMoi = false;
-						document.getElementById('attente').textContent = '1er joueur OK';
+						frmAffichage.attente.value = '1er joueur OK';
 					}
 				
 					partie.on('child_added', afficheCoup);
-
 					// UI
 					piste.classList.add(couleur);
 					for( var i = 0, nbBts = bts.length; i < nbBts ; i++ ) {
