@@ -10,8 +10,9 @@
  * Puissance 4
  *
  * A Faire :
+ * -  signaler l'arrivée du second joueur au premier
  * -  commentaire
- * - listener sur les deconnexion
+ * -  listener sur les deconnexion
  * 
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -30,6 +31,13 @@ var appPuissance4 = (function ( url, document ) {
 	couleur = 'rouge',
 	increment = function(nb) { return nb + 1; },
 	
+	/**
+	 * Contrôle l'alignement de 4 jetons
+	 * Chaque test renvoi le tableau des jetons alignés avec le jeton qui vient d'être joué
+	 */
+	/*
+	 * Alignement vertical
+	 */
 	testVerticale = function(cell) {
 		var tabCell = [cell],
 			coul = cell.className,
@@ -57,6 +65,9 @@ var appPuissance4 = (function ( url, document ) {
 		
 		return tabCell; 
 	},
+	/*
+	 * Alignement horizontal
+	 */
 	testHorizontale = function(cell, row) {
 		var tabCell = [cell],
 			coul = cell.className,
@@ -204,6 +215,7 @@ var appPuissance4 = (function ( url, document ) {
 		return;
 	}
 	// Pose la candidature pour la partie dont le numero est renvoyée
+	// A faire : signaler l'arrivée du second joueur au premier
 	candidatePartie = function(snapNum) {
 		// Affiche le numero de partie et incremente le nb de joueur
 		frmAffichage.numPartie.value = ('000000' + snapNum.val()).slice(-6);
