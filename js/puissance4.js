@@ -23,7 +23,8 @@ var appPuissance4 = (function ( url, document ) {
 	totAlign = 4,
 	piste = document.querySelector('ol.jeu'),
 	bts = piste.querySelectorAll('li button'),
-	colJeu = document.querySelectorAll('ol>li'),
+//	colJeu = document.querySelectorAll('ol>li'),
+	colJeu = piste.querySelectorAll('ol>li'),
 	frmAffichage = document.forms['affichage'],
 	partie = null,
 	joueur = 0,
@@ -214,15 +215,21 @@ var appPuissance4 = (function ( url, document ) {
 		
 		return;
 	}
-	// Pose la candidature pour la partie dont le numero est renvoyée
+	/*
+	 * Appelé à la récupération du numéro de la derniere partie
+	 * Pose la candidature pour la partie dont le numero est renvoyée
+	 *
+	 * snapNum.val() renvoi le numero de la dernière partie en cours
+	 *
+	 */
 	// A faire : signaler l'arrivée du second joueur au premier
 	candidatePartie = function(snapNum) {
 		// Affiche le numero de partie et incremente le nb de joueur
 		frmAffichage.numPartie.value = ('000000' + snapNum.val()).slice(-6);
-		partie = jeu.child(frmAffichage.numPartie.value).child('partie');
+		partie = jeu.child(frmAffichage.numPartie.value).child('partie'); // pointe sur numPartie/partie
 		
 		// increment le nb de joueur
-		partie.child('nbJoueurs').transaction(increment,
+		partie.child('nbJoueurs').transaction(increment, // pointe sur numPartie/nbJoueurs
 			function(error, committed, snapshot) {
 			  if (error)
 				alert('nbJoueurs : Transaction failed abnormally !', error);
