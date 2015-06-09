@@ -2,15 +2,18 @@
  * puissance4.js
  * * 
  * @auteur     marc laville
- * @Copyleft 2013
+ * @Copyleft 2013-2015
  * @date       07/09/2013
- * @version    0.9
- * @revision   $0$
+ * @version    0.9.1
+ * @revision   $1$
  *
  * Puissance 4
  *
+ * @date_revision   marc laville  10/06/2015 : signaler l'arrivée du second joueur au premier
+ *
  * A Faire :
- * -  signaler l'arrivée du second joueur au premier
+ * -  bloquer le jeu en fin de partie
+ * -  signaler la déconnexion de l'autre joueur
  * -  commentaire
  * -  listener sur les deconnexion
  * 
@@ -104,11 +107,12 @@ var appPuissance4 = (function ( url, document ) {
 		var tabCell = [cell],
 			coul = cell.className,
 			colCour = cell.parentNode.parentNode.nextElementSibling,
-			rowCour = row - 1;
+			rowCour = row - 1,
+			cellCour;
 			
 		/* recherche un alignement sur la diagonale ascendante */
 		while( colCour && rowCour > 0 && tabCell.length < totAlign ) {
-			var cellCour = colCour.querySelectorAll('li')[rowCour - 1];
+			cellCour = colCour.querySelectorAll('li')[rowCour - 1];
 			
 			if(cellCour.classList.contains(coul)) {
 				tabCell.push(cellCour);
@@ -122,7 +126,7 @@ var appPuissance4 = (function ( url, document ) {
 		colCour = cell.parentNode.parentNode.previousElementSibling,
 		rowCour = row + 1;
 		while( colCour && rowCour < 7 && tabCell.length < totAlign ) {
-			var cellCour = colCour.querySelectorAll('li')[rowCour - 1];
+			cellCour = colCour.querySelectorAll('li')[rowCour - 1];
 			
 			if(cellCour.classList.contains(coul)) {
 				tabCell.push(cellCour);
@@ -143,7 +147,7 @@ var appPuissance4 = (function ( url, document ) {
 
 		/* recherche un alignement sur la diagonale descendante */
 		while( colCour && rowCour < 7 && tabCell.length < totAlign ) {
-			var cellCour = colCour.querySelectorAll('li')[rowCour - 1];
+			cellCour = colCour.querySelectorAll('li')[rowCour - 1];
 			
 			if(cellCour.classList.contains(coul)) {
 				tabCell.push(cellCour);
@@ -157,7 +161,7 @@ var appPuissance4 = (function ( url, document ) {
 		colCour = cell.parentNode.parentNode.previousElementSibling,
 		rowCour = row - 1;
 		while( colCour && rowCour > 0 && tabCell.length < totAlign ) {
-			var cellCour = colCour.querySelectorAll('li')[rowCour - 1];
+			cellCour = colCour.querySelectorAll('li')[rowCour - 1];
 			
 			if(cellCour.classList.contains(coul)) {
 				tabCell.push(cellCour);
@@ -246,7 +250,7 @@ var appPuissance4 = (function ( url, document ) {
 						couleur = 'rouge';
 						// Attente du deuxieme joueur
 						frmAffichage.attente.value = 'attente joueur ';
-						partie.child( 'nbJoueurs' ).once( 'value', function(snapshot) {
+						partie.child( 'nbJoueurs' ).on( 'value', function(snapshot) {
 						
 							if(2 == 0 + snapshot.val())
 								frmAffichage.attente.value = '2eme joueur OK';
